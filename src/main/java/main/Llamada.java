@@ -13,9 +13,20 @@ public class Llamada {
 	String Liquido;
 	String numFactura;
 	String base;
+	String concepto;
+
+	public String getConcepto() {
+		return concepto;
+	}
+
+
+	public void setConcepto(String concepto) {
+		this.concepto = concepto;
+	}
+
 
 	public Llamada(String cliente, String fecha_Y_Hora, String tiempo, String facturado, String medio_De_Pago,
-			String iva, String tpv, String linea, String liquido, String numFactura, String BaseD) {
+			String iva, String tpv, String linea, String liquido, String numFactura, String BaseD, String concepto) {
 		super();
 		Cliente = cliente;
 		Fecha_Y_Hora = fecha_Y_Hora;

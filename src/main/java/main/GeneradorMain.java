@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -197,6 +198,14 @@ public class GeneradorMain {
 								String Tiempo = row.getCell(c++).getNumericCellValue()+"";
 								double FacturadoD = row.getCell(c++).getNumericCellValue();
 								String Medio_De_Pago = row.getCell(c++).getStringCellValue();
+								if(Medio_De_Pago.toUpperCase().contains("BIZUM")) {
+									Medio_De_Pago = "bizum";
+								} else if(Medio_De_Pago.toUpperCase().contains("TARJETA")) {
+									Medio_De_Pago = "tarjeta";
+								} else if(Medio_De_Pago.toUpperCase().contains("INGRE")) {
+									Medio_De_Pago = "ingreso en banco";
+								}
+								Medio_De_Pago = "Pago mediante "+Medio_De_Pago;
 								double IvaD = FacturadoD*0.21d;
 								c++;
 								String Tpv = row.getCell(c++).getNumericCellValue()+"";
@@ -217,21 +226,31 @@ public class GeneradorMain {
 								double BaseD = FacturadoD-IvaD;
 								short s = c++;
 								String NumFactura;
-//							try {
-//								NumFactura = row.getCell(s) != null ? row.getCell(s).getNumericCellValue()+"" : null;
-//							} catch (Exception e) {
-								NumFactura = row.getCell(s) != null ? row.getCell(s).getStringCellValue() : null;
-								if(NumFactura != null && NumFactura.contains("factura")) {
-									NumFactura = NumFactura.split(" ")[1];
-									Llamada llamada = new Llamada(Cliente, Fecha_Y_Hora, Tiempo, FacturadoD+"", Medio_De_Pago, IvaD+"", Tpv, "", Liquido,NumFactura,BaseD+"");
-									try {
-										Integer.valueOf(NumFactura);
-										if(NumFactura != null && NumFactura != "") {	                		
-											llamadas.add(llamada);
-										}
-									}catch (Exception e) {
-										// TODO: handle exception
+								try {
+									NumFactura = row.getCell(s) != null ? row.getCell(s).getNumericCellValue()+"" : null;
+								} catch (Exception e) {
+									NumFactura = row.getCell(s) != null ? row.getCell(s).getStringCellValue() : null;
+									if(NumFactura != null && NumFactura.contains("factura")) {
+										NumFactura = NumFactura.split(" ")[1];
+									} 
+								}		
+								s = c++;
+								String concepto = row.getCell(s) != null ? row.getCell(s).getStringCellValue()+"" : "";
+								if(StringUtils.isEmpty(concepto)) {
+									concepto = "Sesión de tarot telefónica";
+								} else {
+									concepto = "Curso de  tarot online";
+								}
+								Llamada llamada = new Llamada(Cliente,
+										Fecha_Y_Hora, Tiempo, FacturadoD+"",
+										Medio_De_Pago, IvaD+"", Tpv, "", Liquido,NumFactura,BaseD+"",concepto);
+								try {
+									Integer.valueOf(NumFactura);
+									if(NumFactura != null && NumFactura != "") {	                		
+										llamadas.add(llamada);
 									}
+								}catch (Exception e) {
+									// TODO: handle exception
 								}
 //							}
 								
@@ -257,6 +276,9 @@ public class GeneradorMain {
 		parameters.put("Anio", llamada.getFecha_Y_Hora().subSequence(llamada.getFecha_Y_Hora().length()-4, llamada.getFecha_Y_Hora().length()));
 		parameters.put("NumFactura", llamada.getNumFactura());
 		parameters.put("Base", llamada.getBase());
+		parameters.put("concepto", llamada.getConcepto());
+		parameters.put("metodoPago", llamada.getMedio_De_Pago());
+		
 		
 		return parameters;
 	}
