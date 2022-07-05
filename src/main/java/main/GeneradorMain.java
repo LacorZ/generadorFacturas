@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -37,6 +38,7 @@ public class GeneradorMain {
 	static String [] nombreHojasExcel = {"ENERO","FEBRERO","MARZO","ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"};
 	static String pathParametros;
 	static String pathExcel1;
+	static Date fechaGeneracion = new Date();
 
 	public static void main(String[] args) {
 
@@ -126,7 +128,9 @@ public class GeneradorMain {
 			default:
 				throw new RuntimeException("Numero de mes no esperado: "+numMes);
 			}
-			String trimestreFolder = pathResultado+"\\resultado\\"+anio+"\\trimestre_"+numTrimestre;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+			
+			String trimestreFolder = pathResultado+"\\resultado\\"+sdf.format(fechaGeneracion)+"\\"+anio+"\\trimestre_"+numTrimestre;
 			if(!listaFolders.contains(trimestreFolder)) {
 				listaFolders.add(trimestreFolder);
 			}
@@ -146,7 +150,7 @@ public class GeneradorMain {
 		try {
 			workbook = new XSSFWorkbook(new FileInputStream(pathExcel));
 			for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-				llamadas = obtenerDatosDeHojaExcel( workbook,i );				
+				llamadas.addAll(obtenerDatosDeHojaExcel( workbook,i ))	;
 			}
 //			for (Llamada llamada : llamadas) {
 //				System.out.println(llamada);	
@@ -185,52 +189,57 @@ public class GeneradorMain {
 				for(int r = 1; r < rows; r++) {
 					row = sheet.getRow(r);
 					if(row != null) {
-						short c = 0;
-						if(row.getCell(c) != null && row.getCell(c).getStringCellValue() != null) {
-							String Cliente = row.getCell(c++).getStringCellValue();
-							String Fecha_Y_Hora = sdf.format(row.getCell(c++).getDateCellValue());
-							String Tiempo = row.getCell(c++).getNumericCellValue()+"";
-							double FacturadoD = row.getCell(c++).getNumericCellValue();
-							String Medio_De_Pago = row.getCell(c++).getStringCellValue();
-							double IvaD = FacturadoD*0.21d;
-							c++;
-							String Tpv = row.getCell(c++).getNumericCellValue()+"";
-							String Linea = null;
-							String Metodo=null;
-							XSSFCell cell2 = row.getCell(c++);
-							if(cell2 != null ) {
-								try {
-									Linea = cell2.getNumericCellValue()+"";		
-									Metodo = "Tarjeta de debito/credito";
-								} catch (Exception e) {
+						try {
+							short c = 0;
+							if(row.getCell(c) != null && row.getCell(c).getStringCellValue() != null) {
+								String Cliente = row.getCell(c++).getStringCellValue();
+								String Fecha_Y_Hora = sdf.format(row.getCell(c++).getDateCellValue());
+								String Tiempo = row.getCell(c++).getNumericCellValue()+"";
+								double FacturadoD = row.getCell(c++).getNumericCellValue();
+								String Medio_De_Pago = row.getCell(c++).getStringCellValue();
+								double IvaD = FacturadoD*0.21d;
+								c++;
+								String Tpv = row.getCell(c++).getNumericCellValue()+"";
+								String Linea = null;
+								String Metodo=null;
+								XSSFCell cell2 = row.getCell(c++);
+								if(cell2 != null ) {
+									try {
+										Linea = cell2.getNumericCellValue()+"";		
+										Metodo = "Tarjeta de debito/credito";
+									} catch (Exception e) {
+										Metodo = "Bizum";
+									}
+								}else {
 									Metodo = "Bizum";
 								}
-							}else {
-								Metodo = "Bizum";
-							}
-							String Liquido = row.getCell(c++).getNumericCellValue()+"";
-							double BaseD = FacturadoD-IvaD;
-							short s = c++;
-							String NumFactura;
+								String Liquido = row.getCell(c++).getNumericCellValue()+"";
+								double BaseD = FacturadoD-IvaD;
+								short s = c++;
+								String NumFactura;
 //							try {
 //								NumFactura = row.getCell(s) != null ? row.getCell(s).getNumericCellValue()+"" : null;
 //							} catch (Exception e) {
-							NumFactura = row.getCell(s) != null ? row.getCell(s).getStringCellValue() : null;
-							if(NumFactura != null && NumFactura.contains("factura")) {
-								NumFactura = NumFactura.split(" ")[1];
-								Llamada llamada = new Llamada(Cliente, Fecha_Y_Hora, Tiempo, FacturadoD+"", Medio_De_Pago, IvaD+"", Tpv, "", Liquido,NumFactura,BaseD+"");
-								try {
-									Integer.valueOf(NumFactura);
-									if(NumFactura != null && NumFactura != "") {	                		
-										llamadas.add(llamada);
+								NumFactura = row.getCell(s) != null ? row.getCell(s).getStringCellValue() : null;
+								if(NumFactura != null && NumFactura.contains("factura")) {
+									NumFactura = NumFactura.split(" ")[1];
+									Llamada llamada = new Llamada(Cliente, Fecha_Y_Hora, Tiempo, FacturadoD+"", Medio_De_Pago, IvaD+"", Tpv, "", Liquido,NumFactura,BaseD+"");
+									try {
+										Integer.valueOf(NumFactura);
+										if(NumFactura != null && NumFactura != "") {	                		
+											llamadas.add(llamada);
+										}
+									}catch (Exception e) {
+										// TODO: handle exception
 									}
-								}catch (Exception e) {
-									// TODO: handle exception
 								}
-							}
 //							}
-							
+								
 //	                	System.out.println(llamada);
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
 				}
@@ -283,7 +292,7 @@ public class GeneradorMain {
 		}
 		//C:\Users\regular\Downloads\excel mama mayo.xlsx
 		//C:\Users\regular\Downloads\excel mama mayo.xlsx
-		System.out.println(pathExcel.equals(pathExcel1));
+//		System.out.println(pathExcel.equals(pathExcel1));
 	}
 
 	private static String incializarArgumento(String[] args, int indiceArgumento,  String valorPorDefecto) {		
