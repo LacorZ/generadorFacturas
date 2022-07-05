@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2ae8f631-4f74-400c-95fd-c54db029aa7e">
+	<parameter name="Cliente" class="java.lang.String"/>
+	<parameter name="Facturado" class="java.lang.String"/>
+	<parameter name="Fecha_Y_Hora" class="java.lang.String"/>
+	<parameter name="Iva" class="java.lang.String"/>
+	<parameter name="Anio" class="java.lang.String"/>
+	<parameter name="NumFactura" class="java.lang.String"/>
+	<parameter name="Base" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="7" width="159" height="13" uuid="30aef47c-ecab-4094-92c7-41134492d89d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Mº ESTHER APARICIO LÓPEZ"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="30" width="159" height="13" uuid="13c9d5d1-d2c3-40be-a8ff-6c809191cbc4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N.I.F. 13756626G"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="50" width="159" height="13" uuid="0b5ef882-a9a2-4baa-800d-f2ba0ee59da8"/>
+				<textFieldExpression><![CDATA["Bº El Pozo, nº15"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="70" width="159" height="13" uuid="21cfc0ab-6af4-48b6-8b68-22a6a6efbc71"/>
+				<textFieldExpression><![CDATA["C.P. 39052 Piélagos"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="180" height="118" uuid="0d71e462-bcc7-45c2-b1fc-8dbe835d0207"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{Cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="88" width="159" height="13" uuid="65592213-103d-4988-889a-ab6d30372060"/>
+				<textFieldExpression><![CDATA["Cantabria"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<textField>
+				<reportElement x="180" y="7" width="181" height="21" uuid="45ae3fcb-a719-4c41-b3f4-3ebb4971df27"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FACTURA Nº "+$P{NumFactura}+" / "+$P{Anio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="80" y="10" width="90" height="1" uuid="867aecb3-f824-47a7-9728-8a3a49b010e3"/>
+			</line>
+			<line>
+				<reportElement x="380" y="10" width="90" height="1" uuid="087d3446-2921-4891-b13d-a832ba7f817b"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="128" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="6" width="159" height="13" uuid="286637ce-85a2-42c9-98cd-da7c5980fe5b"/>
+				<textFieldExpression><![CDATA["Fecha: "+$P{Fecha_Y_Hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="70" width="159" height="13" uuid="4e67e0ca-6088-4a90-b396-94defcbaf7f2"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Descripción del servicio"
+
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="90" width="159" height="13" uuid="dabcfe71-ea47-4279-8aeb-2e269c8983cb"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sesión de tarot telefónica"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="108" width="159" height="13" uuid="a9751821-0ef8-4bc2-9f0d-3d65864009d1"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pago mediante bizum"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="184" splitType="Stretch">
+			<rectangle>
+				<reportElement x="380" y="53" width="181" height="131" uuid="b07630d5-e8c6-4a58-af28-e4c3a9e4f5b5"/>
+			</rectangle>
+			<textField>
+				<reportElement x="400" y="60" width="159" height="13" uuid="7d822f61-5ad9-41b1-be41-51964485b1dd"/>
+				<textElement textAlignment="Right">
+					<font isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Base: "+$P{Base}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="80" width="159" height="13" uuid="afe844d6-ad06-4417-b685-d37e06eb5792"/>
+				<textElement textAlignment="Right">
+					<font isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["I.V.A. (21%): "+$P{Iva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="100" width="159" height="13" uuid="92fbb413-0b29-4bea-bbe1-81786439e03c"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL: "+$P{Facturado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
